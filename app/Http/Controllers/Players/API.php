@@ -162,7 +162,7 @@ class API extends Controller {
             ], 404);
         }
 
-        $connection = PlayerConnection::where('player_id', $player->id)->where('player_ip_id', $playerIp->id)->whereNull('disconnect_at')->first();
+        $connection = PlayerConnection::where('player_id', $player->id)->whereNull('disconnect_at')->first();
         if ($connection === null) {
             return response()->json([
                 'error' => 'Player not connected',

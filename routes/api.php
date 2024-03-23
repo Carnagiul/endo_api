@@ -11,7 +11,6 @@ Route::get('/user', function (Request $request) {
 
 Route::group([
     'as' => 'api.',
-    'middleware' => ['auth:sanctum'],
 ], function() {
     Route::group([
         'prefix' => 'players',
@@ -31,7 +30,7 @@ Route::group([
         Route::get("freeze", [PlayerAPI::class, 'freeze'])->name('freeze');
         Route::get("unFreeze", [PlayerAPI::class, 'unFreeze'])->name('unFreeze');
         Route::post('login', [PlayerAPI::class, 'login'])->name('login');
-        Route::get('disconnect', [PlayerAPI::class, 'disconnect'])->name('disconnect');
+        Route::post('disconnect', [PlayerAPI::class, 'disconnect'])->name('disconnect');
         Route::get('register', [PlayerAPI::class, 'register'])->name('register');
 
         Route::group([
