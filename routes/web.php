@@ -24,7 +24,7 @@ Route::group([
     Route::get('isFreeze', [PlayerAPI::class, 'isFreeze'])->name('isFreeze');
     Route::get("freeze", [PlayerAPI::class, 'freeze'])->name('freeze');
     Route::get("unFreeze", [PlayerAPI::class, 'unFreeze'])->name('unFreeze');
-    Route::get('login', [PlayerAPI::class, 'login'])->name('login');
+    Route::post('login', [PlayerAPI::class, 'login'])->name('login');
     Route::get('disconnect', [PlayerAPI::class, 'disconnect'])->name('disconnect');
     Route::get('register', [PlayerAPI::class, 'register'])->name('register');
 
