@@ -11,7 +11,8 @@ Route::get('/user', function (Request $request) {
 
 Route::group([
     'prefix' => 'players',
-    'as' => 'players.'
+    'as' => 'players.',
+    'middleware' => ['auth:sanctum'],
 ], function () {
     Route::get('list', [PlayerAPI::class, 'list'])->name('list');
     Route::get('find', [PlayerAPI::class, 'find'])->name('find');
