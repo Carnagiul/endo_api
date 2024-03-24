@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Players;
 
 use App\Http\Controllers\Controller;
 use App\Models\Player;
+use App\Models\PlayerConfig;
 use App\Models\PlayerIp;
 use App\Models\PlayerConnection;
 use Carbon\Carbon;
@@ -117,10 +118,10 @@ class API extends Controller {
             'ip' => 'required|ip',
         ]);
 
-        $player = Player::where('uuid', $request->uuid)->with("bans")->first();
+        $player = Player::where('uuid', $request->uuid)->with(["bans", "configs", "mutes", "freezes"])->first();
         if ($player === null) {
             $this->register($request);
-            $player = Player::where('uuid', $request->uuid)->with("bans")->first();
+            $player = Player::where('uuid', $request->uuid)->with(["bans", "configs", "mutes", "freezes"])->first();
         }
 
         $playerIp = PlayerIp::where('player_id', $player->id)->where('ip', $request->ip)->first();
@@ -373,6 +374,272 @@ class API extends Controller {
         $player->load('configs');
         return response()->json([
             'configs' => $player->configs,
+        ]);
+    }
+
+    public function playerSetLanguage(Request $request, Player $player) {
+        $request->validate([
+            'language' => 'required|string|in:french,english',
+        ]);
+
+        $config = $player->configs->where('key', 'language')->first();
+        if ($config === null) {
+            $config = new PlayerConfig();
+            $config->player_id = $player->id;
+            $config->key = 'language';
+        }
+
+        $config->value = $request->language;
+        $config->save();
+
+        return response()->json([
+            'config' => $config,
+        ]);
+    }
+
+    public function playerSetCoins(Request $request, Player $player) {
+        $request->validate([
+            'coins' => 'required|integer|min:0',
+        ]);
+
+        $config = $player->configs->where('key', 'coins')->first();
+        if ($config === null) {
+            $config = new PlayerConfig();
+            $config->player_id = $player->id;
+            $config->key = 'coins';
+        }
+
+        $config->value = $request->coins;
+        $config->save();
+
+        return response()->json([
+            'config' => $config,
+        ]);
+    }
+
+    public function playerAddCoins(Request $request, Player $player) {
+        $request->validate([
+            'coins' => 'required|integer|min:0',
+        ]);
+
+        $config = $player->configs->where('key', 'coins')->first();
+        if ($config === null) {
+            $config = new PlayerConfig();
+            $config->player_id = $player->id;
+            $config->key = 'coins';
+        }
+
+        $config->value += $request->coins;
+        $config->save();
+
+        return response()->json([
+            'config' => $config,
+        ]);
+    }
+
+    public function playerRemoveCoins(Request $request, Player $player) {
+        $request->validate([
+            'coins' => 'required|integer|min:0',
+        ]);
+
+        $config = $player->configs->where('key', 'coins')->first();
+        if ($config === null) {
+            $config = new PlayerConfig();
+            $config->player_id = $player->id;
+            $config->key = 'coins';
+        }
+
+        $config->value -= $request->coins;
+        if ($config->value < 0) {
+            $config->value = 0;
+        }
+        $config->save();
+
+        return response()->json([
+            'config' => $config,
+        ]);
+    }
+
+    public function playerSetMoney(Request $request, Player $player) {
+        $request->validate([
+            'money' => 'required|integer|min:0',
+        ]);
+
+        $config = $player->configs->where('key', 'money')->first();
+        if ($config === null) {
+            $config = new PlayerConfig();
+            $config->player_id = $player->id;
+            $config->key = 'money';
+        }
+
+        $config->value = $request->money;
+        $config->save();
+
+        return response()->json([
+            'config' => $config,
+        ]);
+    }
+
+    public function playerAddMoney(Request $request, Player $player) {
+        $request->validate([
+            'money' => 'required|integer|min:0',
+        ]);
+
+        $config = $player->configs->where('key', 'money')->first();
+        if ($config === null) {
+            $config = new PlayerConfig();
+            $config->player_id = $player->id;
+            $config->key = 'money';
+        }
+
+        $config->value += $request->money;
+        $config->save();
+
+        return response()->json([
+            'config' => $config,
+        ]);
+    }
+
+    public function playerRemoveMoney(Request $request, Player $player) {
+        $request->validate([
+            'money' => 'required|integer|min:0',
+        ]);
+
+        $config = $player->configs->where('key', 'money')->first();
+        if ($config === null) {
+            $config = new PlayerConfig();
+            $config->player_id = $player->id;
+            $config->key = 'money';
+        }
+
+        $config->value -= $request->money;
+        if ($config->value < 0) {
+            $config->value = 0;
+        }
+        $config->save();
+
+        return response()->json([
+            'config' => $config,
+        ]);
+    }
+
+    public function playerSetHidePlayer(Request $request, Player $player) {
+        $request->validate([
+            'hide_player' => 'required|string|in:all,friends,none',
+        ]);
+
+        $config = $player->configs->where('key', 'hide_player')->first();
+        if ($config === null) {
+            $config = new PlayerConfig();
+            $config->player_id = $player->id;
+            $config->key = 'hide_player';
+        }
+
+        $config->value = $request->hide_player ? 'true' : 'false';
+        $config->save();
+
+        return response()->json([
+            'config' => $config,
+        ]);
+    }
+
+    public function playerSetConnectionNotification(Request $request, Player $player) {
+        $request->validate([
+            'connection_notification' => 'required|string|in:all,friends,none',
+        ]);
+
+        $config = $player->configs->where('key', 'connection_notification')->first();
+        if ($config === null) {
+            $config = new PlayerConfig();
+            $config->player_id = $player->id;
+            $config->key = 'connection_notification';
+        }
+
+        $config->value = $request->connection_notification;
+        $config->save();
+
+        return response()->json([
+            'config' => $config,
+        ]);
+    }
+
+    public function playerSetFriendInvitation(Request $request, Player $player) {
+        $request->validate([
+            'friend_invitation' => 'required|string|in:all,friends,none',
+        ]);
+
+        $config = $player->configs->where('key', 'friend_invitation')->first();
+        if ($config === null) {
+            $config = new PlayerConfig();
+            $config->player_id = $player->id;
+            $config->key = 'friend_invitation';
+        }
+
+        $config->value = $request->friend_invitation;
+        $config->save();
+
+        return response()->json([
+            'config' => $config,
+        ]);
+    }
+
+    public function playerSetFriendAcception(Request $request, Player $player) {
+        $request->validate([
+            'friend_acception' => 'required|string|in:accept_all,deny_all,none',
+        ]);
+
+        $config = $player->configs->where('key', 'friend_acception')->first();
+        if ($config === null) {
+            $config = new PlayerConfig();
+            $config->player_id = $player->id;
+            $config->key = 'friend_acception';
+        }
+
+        $config->value = $request->friend_acception;
+        $config->save();
+
+        return response()->json([
+            'config' => $config,
+        ]);
+    }
+
+    public function playerSetPingNotification(Request $request, Player $player) {
+        $request->validate([
+            'ping_notification' => 'required|string|in:all,friends,none',
+        ]);
+
+        $config = $player->configs->where('key', 'ping_notification')->first();
+        if ($config === null) {
+            $config = new PlayerConfig();
+            $config->player_id = $player->id;
+            $config->key = 'ping_notification';
+        }
+
+        $config->value = $request->ping_notification;
+        $config->save();
+
+        return response()->json([
+            'config' => $config,
+        ]);
+    }
+
+    public function playerSetPrivateMessage(Request $request, Player $player) {
+        $request->validate([
+            'private_message' => 'required|string|in:all,friends,none',
+        ]);
+
+        $config = $player->configs->where('key', 'private_message')->first();
+        if ($config === null) {
+            $config = new PlayerConfig();
+            $config->player_id = $player->id;
+            $config->key = 'private_message';
+        }
+
+        $config->value = $request->private_message;
+        $config->save();
+
+        return response()->json([
+            'config' => $config,
         ]);
     }
 }

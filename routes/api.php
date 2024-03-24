@@ -44,6 +44,23 @@ Route::group([
             Route::get("isConnected", [PlayerAPI::class, 'playerIsConnected'])->name('isConnected');
             Route::get("stats", [PlayerAPI::class, 'playerStats'])->name('stats');
             Route::get("configs", [PlayerAPI::class, 'playerConfigs'])->name('configs');
+            Route::group([
+                'prefix' => 'configs',
+                'as' => 'configs.'
+            ], function() {
+                Route::post("setLanguage", [PlayerAPI::class, 'playerSetLanguage'])->name('setLanguage');
+                Route::post("setCoins", [PlayerAPI::class, 'playerSetCoins'])->name('setCoins');
+                Route::post("addCoins", [PlayerAPI::class, 'playerAddCoins'])->name('addCoins');
+                Route::post("removeCoins", [PlayerAPI::class, 'playerRemoveCoins'])->name('removeCoins');
+                Route::post("setMoney", [PlayerAPI::class, 'playerSetMoney'])->name('setMoney');
+                Route::post("addMoney", [PlayerAPI::class, 'playerAddMoney'])->name('addMoney');
+                Route::post("removeMoney", [PlayerAPI::class, 'playerRemoveMoney'])->name('removeMoney');
+                Route::post("setHidePlayer", [PlayerAPI::class, 'playerSetHidePlayer'])->name('setHidePlayer');
+                Route::post("setConnectionNotification", [PlayerAPI::class, 'playerSetConnectionNotification'])->name('setConnectionNotification');
+                Route::post("setFriendInvitation", [PlayerAPI::class, 'playerSetFriendInvitation'])->name('setFriendInvitation'); 
+                Route::post("setFriendAcception", [PlayerAPI::class, 'playerSetFriendAcception'])->name('setFriendAcception');
+                Route::post("setPingNotification", [PlayerAPI::class, 'playerSetPingNotification'])->name('setPingNotification');
+            });
         });
     });
 });

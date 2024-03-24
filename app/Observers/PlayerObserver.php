@@ -49,6 +49,24 @@ class PlayerObserver
         $privateMessage->value = 'all';
         $privateMessage->save();
 
+        $privateMessage = new PlayerConfig();
+        $privateMessage->player_id = $player->id;
+        $privateMessage->key = 'language';
+        $privateMessage->value = 'en';
+        $privateMessage->save();
+
+        $privateMessage = new PlayerConfig();
+        $privateMessage->player_id = $player->id;
+        $privateMessage->key = 'coins';
+        $privateMessage->value = '0';
+        $privateMessage->save();
+
+        $privateMessage = new PlayerConfig();
+        $privateMessage->player_id = $player->id;
+        $privateMessage->key = 'diamonds';
+        $privateMessage->value = '0';
+        $privateMessage->save();
+
 
     }
 
