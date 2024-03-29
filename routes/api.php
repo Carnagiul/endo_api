@@ -3,11 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Players\API as PlayerAPI;
-
+use App\Http\Controllers\Translations\API as TranslationsAPI;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
-
 
 Route::group([
     'as' => 'api.',
@@ -62,5 +61,11 @@ Route::group([
                 Route::post("setPingNotification", [PlayerAPI::class, 'playerSetPingNotification'])->name('setPingNotification');
             });
         });
+    });
+    Route::group([
+        "prefix" => "translations",
+        "as" => "translations." 
+    ], function() {
+        Route::get("list", [TranslationsAPI::class, 'list'])->name('list');
     });
 });
