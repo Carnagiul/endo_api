@@ -10,7 +10,7 @@ Route::get('/user', function (Request $request) {
 
 Route::group([
     'as' => 'api.',
-    'middleware' => ['auth:sanctum'],
+    // 'middleware' => ['auth:sanctum'],
 ], function() {
     Route::group([
         'prefix' => 'players',
