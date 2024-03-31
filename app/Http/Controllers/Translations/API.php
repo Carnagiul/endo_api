@@ -54,16 +54,16 @@ class API extends Controller {
             }
             $translations[$translation->key][$translation->lang] .= '},';
         }
-
-
     }
 
     public function list() {
-        $translations = [];
+        $translations = ['keys' => []];
         foreach(Translation::all() as $translation) {
             if (array_key_exists($translation->key, $translations) == false) {
-                $translations[$translation->key] = [];
+                $translations['keys'][] = $translation->key;
+                $translations[$translation->key] = ['lang' => [], 'key' => $translation->key];
             }
+            $translations[$translation->key]['lang'][] = $translation->lang;
             $translations[$translation->key][$translation->lang] = '[",';
             foreach ($translation->components()->orderBy('order')->get() as $component) {
                 if ($component->prev_id != null) {
