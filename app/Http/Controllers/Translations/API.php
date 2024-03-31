@@ -64,7 +64,7 @@ class API extends Controller {
                 $translations[$translation->key] = ['lang' => [], 'key' => $translation->key];
             }
             $translations[$translation->key]['lang'][] = $translation->lang;
-            $translations[$translation->key][$translation->lang] = '[",';
+            $translations[$translation->key][$translation->lang] = '["",';
             foreach ($translation->components()->orderBy('order')->get() as $component) {
                 if ($component->prev_id != null) {
                     $toFind = Translation::where('id', $component->prev_id)->first();
