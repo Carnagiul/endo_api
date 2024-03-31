@@ -10,7 +10,7 @@ Route::get('/user', function (Request $request) {
 
 Route::group([
     'as' => 'api.',
-    // 'middleware' => ['auth:sanctum'],
+    'middleware' => ['auth:sanctum'],
 ], function() {
     Route::group([
         'prefix' => 'players',
@@ -67,7 +67,7 @@ Route::group([
         "prefix" => "translations",
         "as" => "translations." 
     ], function() {
-        Route::get("list", [TranslationsAPI::class, 'list'])->name('list');
-        // Route::post("list", [TranslationsAPI::class, 'list'])->name('list');
+        // Route::get("list", [TranslationsAPI::class, 'list'])->name('list');
+        Route::post("list", [TranslationsAPI::class, 'list'])->name('list');
     });
 });
