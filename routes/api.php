@@ -18,7 +18,7 @@ Route::group([
     ], function () {
         Route::get('list', [PlayerAPI::class, 'list'])->name('list');
         Route::get('find', [PlayerAPI::class, 'find'])->name('find');
-        Route::get('info', [PlayerAPI::class, 'info'])->name('info');
+        Route::post('info', [PlayerAPI::class, 'info'])->name('info');
         Route::get('connected', [PlayerAPI::class, 'connected'])->name('connected');
         Route::get('isMute', [PlayerAPI::class, 'isMute'])->name('isMute');
         Route::get("mute", [PlayerAPI::class, 'mute'])->name('mute');
