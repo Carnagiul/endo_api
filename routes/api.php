@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Players\API as PlayerAPI;
 use App\Http\Controllers\Translations\API as TranslationsAPI;
+use App\Http\Controllers\Groups\API as GroupAPI;
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -63,6 +65,12 @@ Route::group([
                 Route::post("setPingNotification", [PlayerAPI::class, 'playerSetPingNotification'])->name('setPingNotification');
             });
         });
+    });
+    Route::group([
+        "prefix" => "groups",
+        "as" => "groups."
+    ], function() {
+        Route::post("list", [GroupAPI::class, 'list'])->name('list');
     });
     Route::group([
         "prefix" => "translations",

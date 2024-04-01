@@ -63,4 +63,9 @@ class Player extends Model
     public function configs() {
         return $this->hasMany(PlayerConfig::class);
     }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
 }

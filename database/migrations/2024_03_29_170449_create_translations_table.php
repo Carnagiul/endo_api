@@ -64,16 +64,13 @@ return new class extends Migration
             'lang' => 'en'
         ]);
 
-
-
-
         $playerTag->save();
         $playerTagAdmin->save();
 
         $playerTag->components()->create([
             'order' => 0,
             'translation_id' => $playerTag->id,
-            'text' => ' {{playerName}}',
+            'text' => ' playerName',
             'color' => 'yellow',
             'team_color' => true,
         ]);
@@ -81,13 +78,13 @@ return new class extends Migration
         $playerTagAdmin->components()->create([
             'order' => 0,
             'translation_id' => $playerTagAdmin->id,
-            'text' => ' {{playerName}}',
+            'text' => ' playerName',
             'color' => 'yellow',
             'team_color' => true,
             'clickEventType' => 'copy_to_clipboard',
-            'clickEventValue' => '{{playerUUID}}',
+            'clickEventValue' => 'playerUUID',
             'hoverEventType' => 'show_text',
-            'hoverEventContents' => 'Click to copy the UUID of {{playerName}}\\n UUID : {{playerUUID}}',
+            'hoverEventContents' => 'Click to copy the UUID of playerName\\n UUID : playerUUID',
         ]);
 
         $joinTag->components()->create([

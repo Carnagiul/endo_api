@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Group;
 use App\Models\Player;
 use App\Models\PlayerConfig;
 
@@ -12,6 +13,8 @@ class PlayerObserver
      */
     public function created(Player $player): void
     {
+        $player->group_id = Group::where('default', true)->first()->id;
+        $player->save();
         //
         $hidePlayerConfig = new PlayerConfig();
         $hidePlayerConfig->player_id = $player->id;

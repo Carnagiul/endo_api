@@ -379,10 +379,10 @@ class API extends Controller {
 
     public function playerSetGroup(Request $request, Player $player) {
         $request->validate([
-            'group' => 'required|string|in:admin,dev,builder,moderator,helper,vip,player',
+            'group' => 'required|int|exists:groups,id',
         ]);
 
-        $player->group = $request->group;
+        $player->group_id = $request->group_id;
         $player->save();
 
         return response()->json([
@@ -392,7 +392,7 @@ class API extends Controller {
 
     public function playerSetLanguage(Request $request, Player $player) {
         $request->validate([
-            'language' => 'required|string|in:french,english',
+            'language' => 'required|string|exists:translations,lang',
         ]);
 
         $config = $player->configs->where('key', 'language')->first();

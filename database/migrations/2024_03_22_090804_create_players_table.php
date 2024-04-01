@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('uuid')->unique();
             $table->string('email')->unique()->nullable();
-            $table->string('group')->default('player');
+            $table->unsignedBigInteger('group_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
         });
     }
 
