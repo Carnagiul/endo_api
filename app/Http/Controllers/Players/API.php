@@ -377,6 +377,19 @@ class API extends Controller {
         ]);
     }
 
+    public function playerSetGroup(Request $request, Player $player) {
+        $request->validate([
+            'group' => 'required|string|in:admin,dev,builder,moderator,helper,vip,player',
+        ]);
+
+        $player->group = $request->group;
+        $player->save();
+
+        return response()->json([
+            'player' => $player,
+        ]);
+    }
+
     public function playerSetLanguage(Request $request, Player $player) {
         $request->validate([
             'language' => 'required|string|in:french,english',
