@@ -51,14 +51,12 @@ return new class extends Migration
             'key' => 'player_join_tag',
             'lang' => 'en'
         ]);
-
         $joinTag->save();
 
         $playerTag = Translation::create([
             'key' => 'player_tag',
             'lang' => 'en'
         ]);
-
         $playerTagAdmin = Translation::create([
             'key' => 'player_tag_admin',
             'lang' => 'en'
@@ -193,6 +191,196 @@ return new class extends Migration
             'translation_id' => $joinFrAdmin->id,
             'text' => ' est en ligne.',
         ]);
+
+        $tagSystem = Translation::create([
+            'key' => 'tag_system',
+            'lang' => 'en'
+        ]);
+        $tagSystem->save();
+        $tagSystem->components()->create([
+            'order' => 0,
+            'translation_id' => $tagSystem->id,
+            'text' => '[',
+            'color' => 'white',
+        ]);
+        $tagSystem->components()->create([
+            'order' => 1,
+            'translation_id' => $tagSystem->id,
+            'text' => 'System',
+            'color' => 'light_purple',
+        ]);
+        $tagSystem->components()->create([
+            'order' => 2,
+            'translation_id' => $tagSystem->id,
+            'text' => ']',
+            'color' => 'white',
+        ]);
+
+        $playerHideAllPlayersEn = Translation::create([
+            'key' => 'player_hide_all_players',
+            'lang' => 'en'
+        ]);
+        $playerHideAllPlayersEn->save();
+        $playerHideAllPlayersFr = Translation::create([
+            'key' => 'player_hide_all_players',
+            'lang' => 'fr'
+        ]);
+        $playerHideAllPlayersFr->save();
+
+        $playerHideAllPlayersEn->components()->create([
+            'order' => 0,
+            'translation_id' => $playerHideAllPlayersEn->id,
+            'prev_id' => $tagSystem->id,
+        ]);
+        $playerHideAllPlayersEn->components()->create([
+            'order' => 1,
+            'translation_id' => $playerHideAllPlayersEn->id,
+            'text' => ' You have hidden all players.',
+            'color' => 'green',
+        ]);
+
+        $playerHideAllPlayersFr->components()->create([
+            'order' => 0,
+            'translation_id' => $playerHideAllPlayersFr->id,
+            'prev_id' => $tagSystem->id,
+        ]);
+        $playerHideAllPlayersFr->components()->create([
+            'order' => 1,
+            'translation_id' => $playerHideAllPlayersFr->id,
+            'text' => ' Vous avez caché tous les joueurs.',
+            'color' => 'green',
+        ]);
+        $playerShowAllPlayersEn = Translation::create([
+            'key' => 'player_show_all_players',
+            'lang' => 'en'
+        ]);
+        $playerShowAllPlayersEn->save();
+        $playerShowAllPlayersFr = Translation::create([
+            'key' => 'player_show_all_players',
+            'lang' => 'fr'
+        ]);
+        $playerShowAllPlayersFr->save();
+
+        $playerShowAllPlayersEn->components()->create([
+            'order' => 0,
+            'translation_id' => $playerShowAllPlayersEn->id,
+            'prev_id' => $tagSystem->id,
+        ]);
+        $playerShowAllPlayersEn->components()->create([
+            'order' => 1,
+            'translation_id' => $playerShowAllPlayersEn->id,
+            'text' => ' You show all players.',
+            'color' => 'green',
+        ]);
+
+        $playerShowAllPlayersFr->components()->create([
+            'order' => 0,
+            'translation_id' => $playerShowAllPlayersFr->id,
+            'prev_id' => $tagSystem->id,
+        ]);
+        $playerShowAllPlayersFr->components()->create([
+            'order' => 1,
+            'translation_id' => $playerShowAllPlayersFr->id,
+            'text' => ' Vous affichez tous les joueurs.',
+            'color' => 'green',
+        ]);
+
+        $playerHidePlayerErrorEn = Translation::create([
+            'key' => 'player_hide_all_player_error',
+            'lang' => 'en'
+        ]);
+        $playerHidePlayerErrorEn->save();
+        $playerHidePlayerErrorFr = Translation::create([
+            'key' => 'player_hide_all_player_error',
+            'lang' => 'fr'
+        ]);
+        $playerHidePlayerErrorFr->save();
+
+        $playerHidePlayerErrorEn->components()->create([
+            'order' => 0,
+            'translation_id' => $playerHidePlayerErrorEn->id,
+            'prev_id' => $tagSystem->id,
+        ]);
+        $playerHidePlayerErrorEn->components()->create([
+            'order' => 1,
+            'translation_id' => $playerHidePlayerErrorEn->id,
+            'text' => ' You can\'t hide all players before',
+            'color' => 'red',
+        ]);
+        $playerHidePlayerErrorEn->components()->create([
+            'order' => 2,
+            'translation_id' => $playerHidePlayerErrorEn->id,
+            'text' => ' timestampParsed.',
+            'color' => 'gold',
+        ]);
+
+        $playerHidePlayerErrorFr->components()->create([
+            'order' => 0,
+            'translation_id' => $playerHidePlayerErrorFr->id,
+            'prev_id' => $tagSystem->id,
+        ]);
+        $playerHidePlayerErrorFr->components()->create([
+            'order' => 1,
+            'translation_id' => $playerHidePlayerErrorFr->id,
+            'text' => ' Vous ne pouvez pas cacher tous les joueurs avant',
+            'color' => 'red',
+        ]);
+        $playerHidePlayerErrorFr->components()->create([
+            'order' => 2,
+            'translation_id' => $playerHidePlayerErrorFr->id,
+            'text' => ' timestampParsed.',
+            'color' => 'gold',
+        ]);
+
+        $playerShowPlayerErrorEn = Translation::create([
+            'key' => 'player_show_all_player_error',
+            'lang' => 'en'
+        ]);
+        $playerShowPlayerErrorEn->save();
+        $playerShowPlayerErrorFr = Translation::create([
+            'key' => 'player_show_all_player_error',
+            'lang' => 'fr'
+        ]);
+        $playerShowPlayerErrorFr->save();
+
+        $playerShowPlayerErrorEn->components()->create([
+            'order' => 0,
+            'translation_id' => $playerShowPlayerErrorEn->id,
+            'prev_id' => $tagSystem->id,
+        ]);
+        $playerShowPlayerErrorEn->components()->create([
+            'order' => 1,
+            'translation_id' => $playerShowPlayerErrorEn->id,
+            'text' => ' You can\'t show all players before',
+            'color' => 'red',
+        ]);
+        $playerShowPlayerErrorEn->components()->create([
+            'order' => 2,
+            'translation_id' => $playerShowPlayerErrorEn->id,
+            'text' => ' timestampParsed.',
+            'color' => 'gold',
+        ]);
+
+        $playerShowPlayerErrorFr->components()->create([
+            'order' => 0,
+            'translation_id' => $playerShowPlayerErrorFr->id,
+            'prev_id' => $tagSystem->id,
+        ]);
+        $playerShowPlayerErrorFr->components()->create([
+            'order' => 1,
+            'translation_id' => $playerShowPlayerErrorFr->id,
+            'text' => ' Vous ne pouvez pas afficher tous les joueurs avant',
+            'color' => 'red',
+        ]);
+        $playerShowPlayerErrorFr->components()->create([
+            'order' => 2,
+            'translation_id' => $playerShowPlayerErrorFr->id,
+            'text' => ' timestampParsed.',
+            'color' => 'gold',
+        ]);
+
+
+
     }
 
     /**
