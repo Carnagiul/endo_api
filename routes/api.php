@@ -48,6 +48,7 @@ Route::group([
                 'prefix' => 'configs',
                 'as' => 'configs.'
             ], function() {
+                Route::post("setGroup", [PlayerAPI::class, 'playerSetGroup'])->name('setGroup');
                 Route::post("setLanguage", [PlayerAPI::class, 'playerSetLanguage'])->name('setLanguage');
                 Route::post("setCoins", [PlayerAPI::class, 'playerSetCoins'])->name('setCoins');
                 Route::post("addCoins", [PlayerAPI::class, 'playerAddCoins'])->name('addCoins');
