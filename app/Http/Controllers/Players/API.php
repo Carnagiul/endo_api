@@ -11,6 +11,13 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class API extends Controller {
+
+    public function lastBan() {
+        return response()->json([
+            'lastBan' => Player::whereHas('bans')->orderBy('id', 'desc')->first(),
+        ]);
+    }
+
     public function list() {
         return response()->json([
             'players' => Player::all(),
