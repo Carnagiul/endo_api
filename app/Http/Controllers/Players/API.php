@@ -7,6 +7,9 @@ use App\Models\Player;
 use App\Models\PlayerConfig;
 use App\Models\PlayerIp;
 use App\Models\PlayerConnection;
+use App\Models\PlayerFreeze;
+use App\Models\PlayerMute;
+use App\Models\PlayerPunishment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -199,11 +202,22 @@ class API extends Controller {
                 'error' => 'Player not found',
             ], 404);
         }
+        $isPunished = null;
 
         $punishmentModel = ucfirst($punishmentType);
-        $isPunished = $punishmentModel::where('player_id', $player->id)
+        if ($punishmentType === 'PlayerPunishment') {
+            PlayerPunishment::where('player_id', $player->id)
             ->whereNull('deleted_at')
             ->first();
+        } elseif ($punishmentType === 'PlayerMute') {
+            PlayerMute::where('player_id', $player->id)
+            ->whereNull('deleted_at')
+            ->first();
+        } elseif ($punishmentType === 'PlayerFreeze') {
+            PlayerFreeze::where('player_id', $player->id)
+            ->whereNull('deleted_at')
+            ->first();
+        }
 
         if ($isPunished !== null) {
             return response()->json([
@@ -219,19 +233,25 @@ class API extends Controller {
         }
 
         $allowedRoles = ['admin', 'dev', 'moderator', 'helper', 'builder'];
-        if (!in_array($punisher->group, $allowedRoles)) {
+        if (!in_array($punisher->group->name, $allowedRoles)) {
             return response()->json([
                 'error' => 'Punisher not allowed to punish',
             ], 403);
         }
 
-        if (in_array($player->group, $allowedRoles)) {
+        if (in_array($player->group->name, $allowedRoles)) {
             return response()->json([
                 'error' => 'Player not punishable',
             ], 403);
         }
 
-        $punishment = new $punishmentModel();
+        if ($punishmentType === 'PlayerPunishment') {
+            $punishment = new PlayerPunishment();
+        } elseif ($punishmentType === 'PlayerMute') {
+            $punishment = new PlayerMute();
+        } elseif ($punishmentType === 'PlayerFreeze') {
+            $punishment = new PlayerFreeze();
+        }
         $punishment->player_id = $player->id;
         $punishment->punisher_id = $punisher->id;
         $punishment->reason = $request->reason;

@@ -27,7 +27,7 @@ Route::group([
         Route::get("mute", [PlayerAPI::class, 'mute'])->name('mute');
         Route::get("unMute", [PlayerAPI::class, 'unMute'])->name('unMute');
         Route::get('isBan', [PlayerAPI::class, 'isBan'])->name('isBan');
-        Route::get("ban", [PlayerAPI::class, 'ban'])->name('ban');
+        Route::post("ban", [PlayerAPI::class, 'ban'])->name('ban');
         Route::get("unBan", [PlayerAPI::class, 'unBan'])->name('unBan');
         Route::get('isFreeze', [PlayerAPI::class, 'isFreeze'])->name('isFreeze');
         Route::get("freeze", [PlayerAPI::class, 'freeze'])->name('freeze');
