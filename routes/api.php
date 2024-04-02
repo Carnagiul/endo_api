@@ -14,7 +14,7 @@ Route::group([
     'as' => 'api.',
     // 'middleware' => ['auth:sanctum'],
 ], function() {
-    Route::get('lastBan', [PlayerAPI::class, 'lastBan'])->name('lastBan');
+    Route::post('lastBan', [PlayerAPI::class, 'lastBan'])->name('lastBan');
     Route::group([
         'prefix' => 'players',
         'as' => 'players.',
