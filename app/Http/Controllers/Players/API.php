@@ -17,7 +17,7 @@ class API extends Controller {
 
     public function lastBan() {
         return response()->json([
-            'lastBan' => Player::whereHas('bans')->orderBy('id', 'desc')->first(),
+            'lastBan' => PlayerPunishment::where('created_at', '>', Carbon::now()->subMinutes(2))->with('player')->get(),
         ]);
     }
 
