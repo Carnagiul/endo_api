@@ -600,7 +600,7 @@ class API extends Controller {
             $config->key = 'hide_player';
         }
 
-        $config->value = $request->hide_player ? 'true' : 'false';
+        $config->value = $request->hide_player;
         $config->save();
 
         return response()->json([
