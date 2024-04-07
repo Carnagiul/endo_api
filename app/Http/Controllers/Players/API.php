@@ -21,6 +21,31 @@ class API extends Controller {
         ]);
     }
 
+    public function stats() {
+        $players = Player::with('bans', 'mutes', 'freezes', 'ips', 'logs')->get();
+        $results = [];
+        $players->each(function($item) use(&$results) {
+            $timePlay = 0;
+            foreach ($item->logs as $log) {
+                if ($log->disconnect_at != null)
+                    $timePlay += $log->created_at->diffInSeconds($log->disconnect_at);
+                else {
+                    $timePlay += $log->created_at->diffInSeconds(now());
+                }
+            }
+            $results[] = [
+                'player_uuid' => $item->uuid,
+                'ips' => $item->ips->count(),
+                'play_time' => Carbon::createFromTimestamp($timePlay)->format('H:i:s'),
+                'connection_count' => $item->logs->count(),
+
+            ];
+        });
+        return response()->json(
+            $results
+        ); 
+    }
+
     public function list() {
         return response()->json([
             'players' => Player::all(),

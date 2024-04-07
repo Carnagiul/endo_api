@@ -20,6 +20,7 @@ Route::group([
         'as' => 'players.',
     ], function () {
         Route::get('list', [PlayerAPI::class, 'list'])->name('list');
+        Route::get('stats', [PlayerAPI::class, 'stats'])->name('stats');
         Route::get('find', [PlayerAPI::class, 'find'])->name('find');
         Route::post('info', [PlayerAPI::class, 'info'])->name('info');
         Route::get('connected', [PlayerAPI::class, 'connected'])->name('connected');
