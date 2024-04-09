@@ -668,6 +668,36 @@ class API extends Controller {
         ]);
     }
 
+    public function playerUpdateAllConfigs(Request $request, Player $player) {
+        foreach ($request as $key => $value) {
+            $config = $player->configs->where('key', $key)->first();
+            if ($config === null) {
+                $config = new PlayerConfig();
+                $config->player_id = $player->id;
+                $config->key = $key;
+            }
+
+            $config->value = $value;
+            $config->save();
+        }
+        // $configs = $player->configs;
+        // foreach ($request->configs as $key => $value) {
+        //     $config = $configs->where('key', $key)->first();
+        //     if ($config === null) {
+        //         $config = new PlayerConfig();
+        //         $config->player_id = $player->id;
+        //         $config->key = $key;
+        //     }
+
+        //     $config->value = $value;
+        //     $config->save();
+        // }
+
+        return response()->json([
+            'configs' => $player->configs,
+        ]);
+    }
+
     public function playerSetPingNotification(Request $request, Player $player) {
         $request->validate([
             'ping_notification' => 'required|string|in:all,friends,none',
