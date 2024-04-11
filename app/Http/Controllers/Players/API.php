@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Players;
 
 use App\Http\Controllers\Controller;
+use App\Models\Graph;
 use App\Models\Player;
 use App\Models\PlayerConfig;
 use App\Models\PlayerIp;
@@ -43,7 +44,7 @@ class API extends Controller {
         });
         return response()->json(
             $results
-        ); 
+        );
     }
 
     public function list() {
@@ -748,54 +749,47 @@ class API extends Controller {
         $step = 5;
         if (PlayerConnection::first() == null)
             return [];
-        $min_date = PlayerConnection::all()->first()->created_at;
-        $max_date = PlayerConnection::all()->reverse()->first()->updated_at;
+        // $graphs = Graph::where('name', 'maxPlayerCountByTime')->get();
 
-        // $request->validate([
-        //     'min_date' => 'required|date',
-        //     'max_date' => 'required|date',
-        //     'step' => 'required|int|min:0',
-        // ]);
+        $connections = PlayerConnection::all();
+        $connections = $connections->filter(function($item) {
+            return $item->disconnect_at != null;
+        });
+        $connections->each(function(&$item){
+            $item->connect_at = Carbon::parse($item->connect_at, 'UTC');
+            $item->disconnect_at = Carbon::parse($item->disconnect_at, 'UTC');
+        });
 
-        // $step = $request->step;
-        // $min_date = $request->min_date;
-        // $max_date = $request->max_date;
+        $min_date = $connections->first()->created_at;
+        $date = $min_date;
+        $endDate = Carbon::now();
 
-        // $date = $min_date ?? Carbon::parse($request->min_date);
-        // $endDate = $max_date ?? Carbon::parse($request->max_date);
-        $date = Carbon::parse($min_date);
-        $endDate = Carbon::parse($max_date);
-
-        $chartData = [];
         $labels = [];
-        $data = ["quantity" => []];
-        $iteration = 10;
+        $data = ["quantity" => [], 'labels' => []];
         while ($date->isBefore($endDate)) {
             $next = $date->clone();
             $next = $next->addMinutes($step);
-            $count = PlayerConnection::whereBetween('connect_at', [$date, $next])
-            ->where('disconnect_at', '>=', $next)
-            ->count();
-
-                // Add data to the chart
-            $chartData[] = [
-                'min_date' => $date->format('Y-m-d H:i:s'),
-                'max_date' => $next->format('Y-m-d H:i:s'),
-                'date' => $date->format('Y-m-d H:i:s'),
-                'player_count' => $count,
-            ];
+            $test = $connections->filter(function ($connection) use ($date, $next) {
+                return $date->between($connection->connect_at, $connection->disconnect_at) && $next->between($connection->connect_at, $connection->disconnect_at);
+            });
+            $sv = [];
+            $test->each(function($item) use (&$sv) {
+                $sv[] = $item->id;
+            });
+            $data['labels'][] = $sv;
+            $count = $test->count();
+            $connections = $connections->filter(function($item) use ($next) {
+                return $item->disconnect_at->isAfter($next);
+            });
             $labels[] = $date->format('Y-m-d H:i:s');
             $data['quantity'][] = $count;
 
             $date = $date->addMinutes($step);
-            if ($iteration-- < 0)
-                break ;
         }
 
         return [
             'labels' => $labels,
             'data' => $data,
-            'chartData' => $chartData,
         ];
     }
 }
