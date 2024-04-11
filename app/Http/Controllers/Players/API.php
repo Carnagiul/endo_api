@@ -13,6 +13,7 @@ use App\Models\PlayerMute;
 use App\Models\PlayerPunishment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class API extends Controller {
 
@@ -746,6 +747,9 @@ class API extends Controller {
     }
 
     public function maxPlayerCountByTimeValues(Request $request) {
+
+        if (Cache::has("graph.values"))
+            return Cache::get("graph.values");
         $step = 5;
         if (PlayerConnection::first() == null)
             return [];
@@ -786,10 +790,12 @@ class API extends Controller {
 
             $date = $date->addMinutes($step);
         }
-
-        return [
+        $result = [
             'labels' => $labels,
             'data' => $data,
         ];
+        Cache::add("graph.values", $result, now()->addHours(1));
+
+        return $result;
     }
 }
