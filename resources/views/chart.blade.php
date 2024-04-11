@@ -17,8 +17,8 @@
 $(function () {
     var ctx = document.getElementById("playerChart").getContext("2d");
     // examine example_data.json for expected response data
-    var json_url = "http://endorah.localhost/api/graph/values";
-    // var json_url = "https://api.goneworlds.dev/api/graph/values";
+    // var json_url = "http://endorah.localhost/api/graph/values";
+    var json_url = "https://api.goneworlds.dev/api/graph/values";
     // draw empty chart
     var myChart = new Chart(ctx, {
         type: 'line',
@@ -26,7 +26,7 @@ $(function () {
             labels: [],
             datasets: [
                 {
-                    label: "My First dataset",
+                    label: "Player count since 02/04",
                     fill: false,
                     lineTension: 0.1,
                     backgroundColor: "rgba(75,192,192,0.4)",
