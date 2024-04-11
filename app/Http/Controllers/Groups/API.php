@@ -9,7 +9,7 @@ class API extends Controller {
 
    public function list() {
     return response()->json([
-        'groups' => Group::all()
+        'groups' => Group::with(['configs'])->get()
     ]);
    }
 }

@@ -22,6 +22,7 @@ Route::group([
         'as' => 'players.',
     ], function () {
         Route::get('list', [PlayerAPI::class, 'list'])->name('list');
+        Route::get('stats', [PlayerAPI::class, 'stats'])->name('stats');
         Route::get('find', [PlayerAPI::class, 'find'])->name('find');
         Route::post('info', [PlayerAPI::class, 'info'])->name('info');
         Route::get('connected', [PlayerAPI::class, 'connected'])->name('connected');
@@ -53,6 +54,7 @@ Route::group([
                 'prefix' => 'configs',
                 'as' => 'configs.'
             ], function() {
+                Route::post("updateAll", [PlayerAPI::class, 'playerUpdateAllConfigs'])->name('updateAll');
                 Route::post("setGroup", [PlayerAPI::class, 'playerSetGroup'])->name('setGroup');
                 Route::post("setLanguage", [PlayerAPI::class, 'playerSetLanguage'])->name('setLanguage');
                 Route::post("setCoins", [PlayerAPI::class, 'playerSetCoins'])->name('setCoins');

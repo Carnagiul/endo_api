@@ -31,4 +31,9 @@ class Group extends Model
     {
         return $this->hasMany(Player::class);
     }
+
+    public function configs()
+    {
+        return $this->hasMany(GroupConfig::class);
+    }
 }

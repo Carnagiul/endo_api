@@ -21,6 +21,31 @@ class API extends Controller {
         ]);
     }
 
+    public function stats() {
+        $players = Player::with('bans', 'mutes', 'freezes', 'ips', 'logs')->get();
+        $results = [];
+        $players->each(function($item) use(&$results) {
+            $timePlay = 0;
+            foreach ($item->logs as $log) {
+                if ($log->disconnect_at != null)
+                    $timePlay += $log->created_at->diffInSeconds($log->disconnect_at);
+                else {
+                    $timePlay += $log->created_at->diffInSeconds(now());
+                }
+            }
+            $results[] = [
+                'player_uuid' => $item->uuid,
+                'ips' => $item->ips->count(),
+                'play_time' => Carbon::createFromTimestamp($timePlay)->format('H:i:s'),
+                'connection_count' => $item->logs->count(),
+
+            ];
+        });
+        return response()->json(
+            $results
+        ); 
+    }
+
     public function list() {
         return response()->json([
             'players' => Player::all(),
@@ -575,7 +600,7 @@ class API extends Controller {
             $config->key = 'hide_player';
         }
 
-        $config->value = $request->hide_player ? 'true' : 'false';
+        $config->value = $request->hide_player;
         $config->save();
 
         return response()->json([
@@ -640,6 +665,36 @@ class API extends Controller {
 
         return response()->json([
             'config' => $config,
+        ]);
+    }
+
+    public function playerUpdateAllConfigs(Request $request, Player $player) {
+        foreach ($request as $key => $value) {
+            $config = $player->configs->where('key', $key)->first();
+            if ($config === null) {
+                $config = new PlayerConfig();
+                $config->player_id = $player->id;
+                $config->key = $key;
+            }
+
+            $config->value = $value;
+            $config->save();
+        }
+        // $configs = $player->configs;
+        // foreach ($request->configs as $key => $value) {
+        //     $config = $configs->where('key', $key)->first();
+        //     if ($config === null) {
+        //         $config = new PlayerConfig();
+        //         $config->player_id = $player->id;
+        //         $config->key = $key;
+        //     }
+
+        //     $config->value = $value;
+        //     $config->save();
+        // }
+
+        return response()->json([
+            'configs' => $player->configs,
         ]);
     }
 
