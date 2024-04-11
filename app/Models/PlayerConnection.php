@@ -23,6 +23,11 @@ class PlayerConnection extends Model
         'updated_at',
     ];
 
+    protected $cast = [
+        'connect_at' => 'datetime',
+        'disconnect_at' => 'datetime',
+    ];
+
     public function player()
     {
         return $this->belongsTo(Player::class);

@@ -15,6 +15,8 @@ Route::group([
     // 'middleware' => ['auth:sanctum'],
 ], function() {
     Route::post('lastBan', [PlayerAPI::class, 'lastBan'])->name('lastBan');
+    Route::get('graph', [PlayerAPI::class, 'maxPlayerCountByTime'])->name('graph');
+    Route::get('graph/values', [PlayerAPI::class, 'maxPlayerCountByTimeValues'])->name('graph.values');
     Route::group([
         'prefix' => 'players',
         'as' => 'players.',
@@ -61,7 +63,7 @@ Route::group([
                 Route::post("removeMoney", [PlayerAPI::class, 'playerRemoveMoney'])->name('removeMoney');
                 Route::post("setHidePlayer", [PlayerAPI::class, 'playerSetHidePlayer'])->name('setHidePlayer');
                 Route::post("setConnectionNotification", [PlayerAPI::class, 'playerSetConnectionNotification'])->name('setConnectionNotification');
-                Route::post("setFriendInvitation", [PlayerAPI::class, 'playerSetFriendInvitation'])->name('setFriendInvitation'); 
+                Route::post("setFriendInvitation", [PlayerAPI::class, 'playerSetFriendInvitation'])->name('setFriendInvitation');
                 Route::post("setFriendAcception", [PlayerAPI::class, 'playerSetFriendAcception'])->name('setFriendAcception');
                 Route::post("setPingNotification", [PlayerAPI::class, 'playerSetPingNotification'])->name('setPingNotification');
             });
@@ -75,7 +77,7 @@ Route::group([
     });
     Route::group([
         "prefix" => "translations",
-        "as" => "translations." 
+        "as" => "translations."
     ], function() {
         // Route::get("list", [TranslationsAPI::class, 'list'])->name('list');
         Route::post("list", [TranslationsAPI::class, 'list'])->name('list');

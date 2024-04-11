@@ -682,4 +682,65 @@ class API extends Controller {
             'config' => $config,
         ]);
     }
+
+    public function maxPlayerCountByTime() {
+
+        return view('chart');
+
+    }
+
+    public function maxPlayerCountByTimeValues(Request $request) {
+        $step = 5;
+        if (PlayerConnection::first() == null)
+            return [];
+        $min_date = PlayerConnection::all()->first()->created_at;
+        $max_date = PlayerConnection::all()->reverse()->first()->updated_at;
+
+        // $request->validate([
+        //     'min_date' => 'required|date',
+        //     'max_date' => 'required|date',
+        //     'step' => 'required|int|min:0',
+        // ]);
+
+        // $step = $request->step;
+        // $min_date = $request->min_date;
+        // $max_date = $request->max_date;
+
+        // $date = $min_date ?? Carbon::parse($request->min_date);
+        // $endDate = $max_date ?? Carbon::parse($request->max_date);
+        $date = Carbon::parse($min_date);
+        $endDate = Carbon::parse($max_date);
+
+        $chartData = [];
+        $labels = [];
+        $data = ["quantity" => []];
+        $iteration = 10;
+        while ($date->isBefore($endDate)) {
+            $next = $date->clone();
+            $next = $next->addMinutes($step);
+            $count = PlayerConnection::whereBetween('connect_at', [$date, $next])
+            ->where('disconnect_at', '>=', $next)
+            ->count();
+
+                // Add data to the chart
+            $chartData[] = [
+                'min_date' => $date->format('Y-m-d H:i:s'),
+                'max_date' => $next->format('Y-m-d H:i:s'),
+                'date' => $date->format('Y-m-d H:i:s'),
+                'player_count' => $count,
+            ];
+            $labels[] = $date->format('Y-m-d H:i:s');
+            $data['quantity'][] = $count;
+
+            $date = $date->addMinutes($step);
+            if ($iteration-- < 0)
+                break ;
+        }
+
+        return [
+            'labels' => $labels,
+            'data' => $data,
+            'chartData' => $chartData,
+        ];
+    }
 }
